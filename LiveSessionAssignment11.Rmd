@@ -1,0 +1,58 @@
+---
+title: "LiveSessionAssignment11"
+author: "Ruby Vazquez Pena"
+date: "11/27/2016"
+output: html_document
+---
+1)	Go through the electric equipment example. 
+
+```{r}
+library("fpp") #fpp package must be installed first
+```
+
+a)	Plot the time series. Can you identify seasonal fluctuations and/or a trend? 
+
+```{r}
+data(hsales)
+plot(hsales)
+```
+We see that every 5 years we decrease, then the next 5 years we increase.
+
+b)	Use a classical decomposition to calculate the trend-cycle and seasonal indices. 
+```{r}
+fitd <- decompose(hsales)
+plot(fitd)
+```
+
+c)	Do the results support the graphical interpretation from part (a)? 
+Yes the trend graph suppots the graphical interpretation from part a, the alternation every 5 years.
+
+d)	Compute and plot the seasonally adjusted data. 
+```{r}
+eeadj <- seasadj(fitd)
+plot(eeadj)
+```
+
+e)	Change one observation to be an outlier (e.g., add 500 to one observation), and recompute the seasonally adjusted data. What is the effect of the outlier? 
+```{r}
+hsales2 <- ts(c(500,hsales[1:54],hsales[55]+200,hsales[56:191]),start=c(1996,1),frequency=12)
+plot(hsales2)
+```
+We have a peak in the location of the outlier.
+
+g)	Use STL to decompose the series. 
+```{r}
+fit <- stl(hsales, s.window=5)
+plot(fit)
+```
+
+```{r}
+plot(hsales, col="gray",
+     main="hsales",
+     ylab="New orders index", xlab="")
+lines(fit$time.series[,2],col="red",ylab="Trend")
+```
+
+f)	Does it make any difference if the outlier is near the end rather than in the middle of the time series? 
+There is no difference having the outlier near the end or in the middle of the time series. It makes a difference having the outlier in the front. 
+
